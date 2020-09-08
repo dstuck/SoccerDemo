@@ -5,8 +5,11 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public float speed = 3.0f;
+    public float kickForce = 1000.0f;
+    public float kickRange = 0.075f;
 
-    Rigidbody2D rigidbody2d;
+    Rigidbody2D playerRigidbody2d;
+    Rigidbody2D _ballRigidbody2d;
     float horizontal;
     float vertical;
 
@@ -16,7 +19,8 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         //animator = GetComponent<Animator>();
-        rigidbody2d = GetComponent<Rigidbody2D>();
+        playerRigidbody2d = GetComponent<Rigidbody2D>();
+        _ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -36,15 +40,31 @@ public class PlayerMove : MonoBehaviour
         //animator.SetFloat("Look X", lookDirection.x);
         //animator.SetFloat("Look Y", lookDirection.y);
         //animator.SetFloat("Speed", move.magnitude);
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Kick();
+        }
+    }
+
+    void Kick()
+    {
+        Vector2 diff_vec = _ballRigidbody2d.position - playerRigidbody2d.position;
+        Debug.Log(diff_vec + " " + diff_vec.SqrMagnitude());
+        if (diff_vec.SqrMagnitude() <= kickRange)
+        {
+            diff_vec.Normalize();
+            _ballRigidbody2d.AddForce(diff_vec * kickForce);
+        }
     }
 
     void FixedUpdate()
     {
-        Vector2 position = rigidbody2d.position;
+        Vector2 position = playerRigidbody2d.position;
         position.x = position.x + speed * horizontal * Time.deltaTime;
         position.y = position.y + speed * vertical * Time.deltaTime;
 
-        rigidbody2d.MovePosition(position);
+        playerRigidbody2d.MovePosition(position);
         //rigidbody2d.transform.Translate()
     }
 }
