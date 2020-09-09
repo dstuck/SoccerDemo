@@ -1,0 +1,11 @@
+Just had the realization that what you really care about controlling in soccer 
+is the movement of the ball not the player. That means when you have the ball,
+saying to go the opposite way should direct the player to go even further 
+forward to kick you backwards
+
+What if all controls were for the ball and were just delegated to players who
+have more complex controls that can can be puppeted by the ball?
+
+
+Setting one unit per meter requires scaling sprites. i.e. man sprite is 76 pixels high, so need to set 42 pix/unit so that he is 1.8 units tall or ~6 ft
+10 miles per hour (6 minute mile) is 4.47 m/s
