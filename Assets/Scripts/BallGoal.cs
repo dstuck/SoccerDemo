@@ -26,6 +26,7 @@ public class BallGoal : MonoBehaviour
         float distanceFactor = baseDistanceGoal;
 
         _movementGoal.Set(horizontal, vertical);
+        _movementGoal.Normalize();
         _movementGoal *= distanceFactor;
 
     }

@@ -12,8 +12,8 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
     float _kickDistance = 0.1f;
-    float METERS_PER_NEWTON = 0.02f;
-    float _POSITION_ERROR = 0.0001f;
+    float METERS_PER_NEWTON = 0.01f;
+    float _POSITION_ERROR = 0.00001f;
 
     float _planTimer;
     float _planDelayTime = 0.05f;
@@ -63,7 +63,10 @@ public class PlayerMove : MonoBehaviour
 
         playerRigidbody2d.MovePosition(playerRigidbody2d.position + moveDir);
 
-        if ((playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR)
+        if (
+            _ballGoal.movementGoal.magnitude > _POSITION_ERROR
+            && (playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR
+            )
         {
             Kick(_ballGoal.movementGoal.magnitude / METERS_PER_NEWTON);
         }
