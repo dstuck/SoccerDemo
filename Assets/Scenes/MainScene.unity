@@ -242,10 +242,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  kickForce: 1000
-  kickRange: 0.1
+  maxKickForce: 1000
+  kickRange: 0.3
   dribbleForce: 400
   dribbleDelay: 0.5
+  METERS_PER_NEWTON: 0.04
 --- !u!58 &576513876
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -274,6 +275,7 @@ GameObject:
   - component: {fileID: 604667337}
   - component: {fileID: 604667339}
   - component: {fileID: 604667338}
+  - component: {fileID: 604667340}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -369,6 +371,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &604667340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604667336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea36476551d314a089954ecbe3ba9c7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDistanceGoal: 2
+  _movementGoal: {x: 0, y: 0}
 --- !u!4 &604667341
 Transform:
   m_ObjectHideFlags: 0

@@ -4,108 +4,86 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float speed = 3.0f;
-    public float kickForce = 1000.0f;
-    public float kickRange = 0.075f;
-    public float dribbleForce = 250.0f;
-    public float dribbleDelay = 0.3f;
+    public float maxSpeed = 4.7f;
+    public float maxKickForce = 1000.0f;
+    public float kickRange = 0.3f;
 
     Rigidbody2D playerRigidbody2d;
     Rigidbody2D _ballRigidbody2d;
-    float horizontal;
-    float vertical;
+    BallGoal _ballGoal;
+    float _kickDistance = 0.1f;
+    float METERS_PER_NEWTON = 0.02f;
+    float _POSITION_ERROR = 0.0001f;
 
-    bool _is_dribbling;
-    float _dribble_timer;
-    //public bool HasBall { get { return _is_dribbling; } }
+    float _planTimer;
+    float _planDelayTime = 0.05f;
+    Vector2 targetPosition;
 
     //Animator animator;
-    Vector2 moveVector = new Vector2(1, 0);
 
     void Start()
     {
         //animator = GetComponent<Animator>();
         playerRigidbody2d = GetComponent<Rigidbody2D>();
         _ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
-        _is_dribbling = false;
-        _dribble_timer = 0;
+        _ballGoal = GameObject.FindWithTag("Ball").GetComponent<BallGoal>();
+        _planTimer = 0;
+        targetPosition = playerRigidbody2d.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
-        Vector2 lookDirection = new Vector2(horizontal, vertical);
-        moveVector.Set(lookDirection.x, lookDirection.y);
-
-        if (!Mathf.Approximately(lookDirection.x, 0.0f) || !Mathf.Approximately(lookDirection.y, 0.0f))
+        _planTimer += Time.deltaTime;
+        if (_planTimer > _planDelayTime)
         {
-            lookDirection.Normalize();
+            UpdateMoveGoal();
+            //Debug.Log("targetPosition = " + targetPosition);
+            _planTimer = 0;
         }
-
-        //animator.SetFloat("Look X", lookDirection.x);
-        //animator.SetFloat("Look Y", lookDirection.y);
-        //animator.SetFloat("Speed", move.magnitude);
-
-        _dribble_timer += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Kick();
+            Kick(maxKickForce);
         }
     }
 
     void FixedUpdate()
     {
-        Vector2 position = playerRigidbody2d.position;
-        position.x = position.x + speed * horizontal * Time.deltaTime;
-        position.y = position.y + speed * vertical * Time.deltaTime;
-
-        playerRigidbody2d.MovePosition(position);
-        //rigidbody2d.transform.Translate()
-        if (_is_dribbling && (_dribble_timer > dribbleDelay))
+        //Vector2 position = playerRigidbody2d.position;
+        //position.x = position.x + speed * horizontal * Time.deltaTime;
+        //position.y = position.y + speed * vertical * Time.deltaTime;
+        //Debug.Log("targetPosition =" + targetPosition);
+        Vector2 moveDir = targetPosition - playerRigidbody2d.position;
+        if (moveDir.magnitude > maxSpeed * Time.deltaTime)
         {
-            Dribble();
+            moveDir.Normalize();
+            moveDir *= maxSpeed * Time.deltaTime;
+        }
+
+        playerRigidbody2d.MovePosition(playerRigidbody2d.position + moveDir);
+
+        if ((playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR)
+        {
+            Kick(_ballGoal.movementGoal.magnitude / METERS_PER_NEWTON);
         }
     }
 
-    void Kick()
+    void UpdateMoveGoal()
+    {
+        Vector2 ballTargetPosition = _ballGoal.movementGoal;
+        ballTargetPosition.Normalize();
+        targetPosition = _ballRigidbody2d.position - ballTargetPosition * _kickDistance;
+    }
+
+    void Kick(float kickForce)
     {
         Vector2 diff_vec = _ballRigidbody2d.position - playerRigidbody2d.position;
-        //Debug.Log(diff_vec + " " + diff_vec.SqrMagnitude());
-        if (diff_vec.SqrMagnitude() <= kickRange)
+        Debug.Log("Kicking with force: " + kickForce);
+        if (diff_vec.magnitude <= kickRange)
         {
             diff_vec.Normalize();
-            _ballRigidbody2d.AddForce(diff_vec * kickForce);
+            _ballRigidbody2d.AddForce(diff_vec * Mathf.Clamp(kickForce, 0, maxKickForce));
         }
-    }
-
-    void Dribble()
-    {
-        _dribble_timer = 0;
-        Vector2 pathToFuturePosition = _ballRigidbody2d.GetPoint(playerRigidbody2d.GetRelativePoint(moveVector));
-        Debug.Log("Dribble" + pathToFuturePosition);
-        _ballRigidbody2d.AddForce(pathToFuturePosition * dribbleForce);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Ball"))
-        {
-            Debug.Log("Ball entered collider");
-            _is_dribbling = true;
-            //other.GetComponent<Rigidbody2D>().AddForce(lookDirection * dribbleForce);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Ball"))
-        {
-            Debug.Log("Ball exited collider");
-            _is_dribbling = false;        }
     }
 }
-
