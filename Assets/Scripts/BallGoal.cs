@@ -11,6 +11,8 @@ public class BallGoal : MonoBehaviour
     public Vector2 _movementGoal = new Vector2(0, 0);
     public Vector2 movementGoal { get { return _movementGoal; } }
 
+    float kickFactor = 4.0f;
+
 
     void Start()
     {
@@ -24,6 +26,12 @@ public class BallGoal : MonoBehaviour
         vertical = Input.GetAxis("Vertical");
 
         float distanceFactor = baseDistanceGoal;
+
+        if (Input.GetKey(KeyCode.C))
+        {
+            distanceFactor *= kickFactor;
+        }
+
 
         _movementGoal.Set(horizontal, vertical);
         _movementGoal.Normalize();
