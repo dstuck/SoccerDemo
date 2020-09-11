@@ -32,10 +32,12 @@ public class BallGoal : MonoBehaviour
             distanceFactor *= kickFactor;
         }
 
-
         _movementGoal.Set(horizontal, vertical);
-        _movementGoal.Normalize();
-        _movementGoal *= distanceFactor;
+        if (!(Mathf.Approximately(horizontal, 0.0f) && Mathf.Approximately(vertical, 0.0f)))
+        {
+            _movementGoal.Normalize();
+            _movementGoal *= distanceFactor;
+        }
 
     }
 }

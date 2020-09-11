@@ -8,6 +8,9 @@ public class PlayerMove : MonoBehaviour
     public float maxKickForce = 1000.0f;
     public float kickRange = 0.3f;
 
+    bool _hasBall = false;
+    public bool hasBall { get { return _hasBall; } set { _hasBall = value; } }
+
     Rigidbody2D playerRigidbody2d;
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
@@ -35,25 +38,16 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         _planTimer += Time.deltaTime;
-        if (_planTimer > _planDelayTime)
+        if (hasBall && _planTimer > _planDelayTime)
         {
             UpdateMoveGoal();
             //Debug.Log("targetPosition = " + targetPosition);
             _planTimer = 0;
         }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Kick(maxKickForce);
-        }
     }
 
     void FixedUpdate()
     {
-        //Vector2 position = playerRigidbody2d.position;
-        //position.x = position.x + speed * horizontal * Time.deltaTime;
-        //position.y = position.y + speed * vertical * Time.deltaTime;
-        //Debug.Log("targetPosition =" + targetPosition);
         Vector2 moveDir = targetPosition - playerRigidbody2d.position;
         if (moveDir.magnitude > maxSpeed * Time.deltaTime)
         {
@@ -82,9 +76,9 @@ public class PlayerMove : MonoBehaviour
     void Kick(float kickForce)
     {
         Vector2 diff_vec = _ballRigidbody2d.position - playerRigidbody2d.position;
-        Debug.Log("Kicking with force: " + kickForce);
         if (diff_vec.magnitude <= kickRange)
         {
+            Debug.Log("Kicking with force, direction: " + kickForce + ", " + diff_vec);
             diff_vec.Normalize();
             _ballRigidbody2d.AddForce(diff_vec * Mathf.Clamp(kickForce, 0, maxKickForce));
         }
