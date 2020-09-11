@@ -33,11 +33,12 @@ public class BallGoal : MonoBehaviour
         }
 
         _movementGoal.Set(horizontal, vertical);
-        if (!(Mathf.Approximately(horizontal, 0.0f) && Mathf.Approximately(vertical, 0.0f)))
+
+        // If we're using a square input, force it back into a unit circle
+        if (_movementGoal.SqrMagnitude() > 1)
         {
             _movementGoal.Normalize();
-            _movementGoal *= distanceFactor;
         }
-
+        _movementGoal *= distanceFactor;
     }
 }
