@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
     float _kickDistance = 0.1f;
-    float METERS_PER_NEWTON = 0.01f;
+    float METERS_PER_NEWTON = 0.0089f;
     float _POSITION_ERROR = 0.00001f;
 
     float _planTimer;
@@ -63,6 +63,7 @@ public class PlayerMove : MonoBehaviour
             )
         {
             Kick(_ballGoal.movementGoal.magnitude / METERS_PER_NEWTON);
+            hasBall = false; // still too close to ball
         }
     }
 

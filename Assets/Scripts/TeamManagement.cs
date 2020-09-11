@@ -1,24 +1,34 @@
-﻿using System.Collections;
+﻿using System.Linq;using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TeamManagement : MonoBehaviour
 {
     Rigidbody2D ballRigidbody2d;
+    PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
+    PlayerMove[] teamPlayers;
+
+    float predictionHorizon = 1.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
+        ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
         teamPlayerRigidbody2ds = GetComponentsInChildren<Rigidbody2D>();
-        AssignBallToPlayer();
+        teamPlayers = GetComponentsInChildren<PlayerMove>();
+        //AssignBallToPlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!teamPlayers.Select(x => x.hasBall).Aggregate(false, (x, y) => x || y))
+        {
+            AssignBallToPlayer();
+        }
     }
 
     Rigidbody2D GetClosestPlayer(Vector2 point)
@@ -40,7 +50,9 @@ public class TeamManagement : MonoBehaviour
 
     void AssignBallToPlayer()
     {
-        Rigidbody2D closest_player = GetClosestPlayer(ballRigidbody2d.position);
+        Vector2 futureBallPosition = ballPredictor.PredictPositionInFuture(predictionHorizon);
+        Debug.Log("Current, future position: " + ballRigidbody2d.position + ", " + futureBallPosition);
+        Rigidbody2D closest_player = GetClosestPlayer(futureBallPosition);
         closest_player.gameObject.GetComponent<PlayerMove>().hasBall = true;
     }
 }

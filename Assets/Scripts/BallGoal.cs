@@ -41,4 +41,25 @@ public class BallGoal : MonoBehaviour
         }
         _movementGoal *= distanceFactor;
     }
+
+    float _calculateVelocityFromForce(float F)
+    {
+        return (F / ballRigidbody2d.mass) * Time.fixedDeltaTime;
+    }
+
+    float _calculateFinalPositionFromVelocity(float V)
+    {
+        return V / ballRigidbody2d.drag;
+    }
+
+    float _distanceFromForce(float F)
+    {
+        return F * Time.fixedDeltaTime / ballRigidbody2d.mass / ballRigidbody2d.drag;
+    }
+
+    float getMetersPerNewtonFactor()
+    {
+        // This converts an instantaneous force into the distance the ball will travel
+        return Time.fixedDeltaTime / ballRigidbody2d.mass / ballRigidbody2d.drag;
+    }
 }
