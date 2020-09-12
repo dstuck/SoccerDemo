@@ -51,7 +51,7 @@ public class TeamManagement : MonoBehaviour
     void AssignBallToPlayer()
     {
         Vector2 futureBallPosition = ballPredictor.PredictPositionInFuture(predictionHorizon);
-        Debug.Log("Current, future position: " + ballRigidbody2d.position + ", " + futureBallPosition);
+        //Debug.Log("Current, future position: " + ballRigidbody2d.position + ", " + futureBallPosition);
         Rigidbody2D closest_player = GetClosestPlayer(futureBallPosition);
         closest_player.gameObject.GetComponent<PlayerMove>().hasBall = true;
     }

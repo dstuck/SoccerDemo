@@ -14,6 +14,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D playerRigidbody2d;
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
+    PhysicsPredictor ballPredictor;
     float _kickDistance = 0.1f;
     float METERS_PER_NEWTON = 0.0089f;
     float _POSITION_ERROR = 0.00001f;
@@ -30,6 +31,7 @@ public class PlayerMove : MonoBehaviour
         playerRigidbody2d = GetComponent<Rigidbody2D>();
         _ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
         _ballGoal = GameObject.FindWithTag("Ball").GetComponent<BallGoal>();
+        ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
         _planTimer = 0;
         targetPosition = playerRigidbody2d.position;
     }
@@ -62,7 +64,7 @@ public class PlayerMove : MonoBehaviour
             && (playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR
             )
         {
-            Kick(_ballGoal.movementGoal.magnitude / METERS_PER_NEWTON);
+            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition).magnitude);
             hasBall = false; // still too close to ball
         }
     }

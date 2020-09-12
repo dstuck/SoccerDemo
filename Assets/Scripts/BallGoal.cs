@@ -10,6 +10,7 @@ public class BallGoal : MonoBehaviour
     float vertical;
     public Vector2 _movementGoal = new Vector2(0, 0);
     public Vector2 movementGoal { get { return _movementGoal; } }
+    public Vector2 targetPosition { get { return _movementGoal + ballRigidbody2d.position; } }
 
     float kickFactor = 4.0f;
 
@@ -40,26 +41,5 @@ public class BallGoal : MonoBehaviour
             _movementGoal.Normalize();
         }
         _movementGoal *= distanceFactor;
-    }
-
-    float _calculateVelocityFromForce(float F)
-    {
-        return (F / ballRigidbody2d.mass) * Time.fixedDeltaTime;
-    }
-
-    float _calculateFinalPositionFromVelocity(float V)
-    {
-        return V / ballRigidbody2d.drag;
-    }
-
-    float _distanceFromForce(float F)
-    {
-        return F * Time.fixedDeltaTime / ballRigidbody2d.mass / ballRigidbody2d.drag;
-    }
-
-    float getMetersPerNewtonFactor()
-    {
-        // This converts an instantaneous force into the distance the ball will travel
-        return Time.fixedDeltaTime / ballRigidbody2d.mass / ballRigidbody2d.drag;
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class to predict dynamics of an object with drag (no constant forces)
+/// </summary>
 public class PhysicsPredictor : MonoBehaviour
 {
     Rigidbody2D thisRigidBody;
@@ -35,6 +38,17 @@ public class PhysicsPredictor : MonoBehaviour
         return thisRigidBody.position + thisRigidBody.velocity / drag * (1 - Mathf.Exp(-t * drag));
     }
 
+    public Vector2 PredictForceToReachPoint(Vector2 point)
+    {
+        Vector2 diff_vector = point - thisRigidBody.position;
+        float distance = diff_vector.magnitude;
+        Debug.Log("Distance, " + distance);
+        float force_magnitude = distance * thisRigidBody.mass * thisRigidBody.drag / Time.fixedDeltaTime;
+
+        diff_vector.Normalize();
+        return diff_vector * force_magnitude;
+    }
+
     float _calculateVelocityFromForce(float F)
     {
         return (F / thisRigidBody.mass) * Time.fixedDeltaTime;
@@ -48,11 +62,5 @@ public class PhysicsPredictor : MonoBehaviour
     float _distanceFromForce(float F)
     {
         return F * Time.fixedDeltaTime / thisRigidBody.mass / thisRigidBody.drag;
-    }
-
-    float getMetersPerNewtonFactor()
-    {
-        // This converts an instantaneous force into the distance the ball will travel
-        return Time.fixedDeltaTime / thisRigidBody.mass / thisRigidBody.drag;
     }
 }
