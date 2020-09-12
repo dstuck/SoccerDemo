@@ -17,7 +17,7 @@ public class BallGoal : MonoBehaviour
 
     void Start()
     {
-        ballRigidbody2d = GetComponent<Rigidbody2D>();
+        ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
