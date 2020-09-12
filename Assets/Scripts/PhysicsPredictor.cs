@@ -42,7 +42,7 @@ public class PhysicsPredictor : MonoBehaviour
     {
         Vector2 diff_vector = point - thisRigidBody.position;
         float distance = diff_vector.magnitude;
-        Debug.Log("Distance, " + distance);
+        //Debug.Log("Distance, " + distance);
         float force_magnitude = distance * thisRigidBody.mass * thisRigidBody.drag / Time.fixedDeltaTime;
 
         diff_vector.Normalize();
