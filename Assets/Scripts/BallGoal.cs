@@ -10,6 +10,7 @@ public class BallGoal : MonoBehaviour
     float vertical;
     public Vector2 _movementGoal = new Vector2(0, 0);
     public Vector2 movementGoal { get { return _movementGoal; } }
+    public Vector2 targetPosition { get { return _movementGoal + ballRigidbody2d.position; } }
 
     float kickFactor = 4.0f;
 
@@ -32,10 +33,13 @@ public class BallGoal : MonoBehaviour
             distanceFactor *= kickFactor;
         }
 
-
         _movementGoal.Set(horizontal, vertical);
-        _movementGoal.Normalize();
-        _movementGoal *= distanceFactor;
 
+        // If we're using a square input, force it back into a unit circle
+        if (_movementGoal.SqrMagnitude() > 1)
+        {
+            _movementGoal.Normalize();
+        }
+        _movementGoal *= distanceFactor;
     }
 }
