@@ -31,7 +31,7 @@ public class PlayerMove : MonoBehaviour
         //animator = GetComponent<Animator>();
         playerRigidbody2d = GetComponent<Rigidbody2D>();
         _ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
-        _ballGoal = GameObject.FindWithTag("Ball").GetComponent<BallGoal>();
+        _ballGoal = GetComponentInParent<BallGoal>();
         ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
         _planTimer = 0.0f;
         _kickTimer = _kickDelay;
