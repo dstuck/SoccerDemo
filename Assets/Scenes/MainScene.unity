@@ -247,6 +247,7 @@ GameObject:
   m_Component:
   - component: {fileID: 293341597}
   - component: {fileID: 293341598}
+  - component: {fileID: 293341599}
   m_Layer: 0
   m_Name: Team
   m_TagString: Untagged
@@ -283,6 +284,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b307d5c9fc54070b8ac853ace98c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &293341599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293341596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea36476551d314a089954ecbe3ba9c7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseDistanceGoal: 2
+  _movementGoal: {x: 0, y: 0}
 --- !u!4 &576513873 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3425052710259711087, guid: 075fd9a07ad6c4928b8b5c0b8f3176ee, type: 3}
@@ -300,7 +315,6 @@ GameObject:
   - component: {fileID: 604667337}
   - component: {fileID: 604667339}
   - component: {fileID: 604667338}
-  - component: {fileID: 604667340}
   - component: {fileID: 604667342}
   m_Layer: 0
   m_Name: Ball
@@ -397,20 +411,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &604667340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604667336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea36476551d314a089954ecbe3ba9c7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseDistanceGoal: 2
-  _movementGoal: {x: 0, y: 0}
 --- !u!4 &604667341
 Transform:
   m_ObjectHideFlags: 0

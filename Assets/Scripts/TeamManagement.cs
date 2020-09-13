@@ -9,6 +9,7 @@ public class TeamManagement : MonoBehaviour
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
     PlayerMove[] teamPlayers;
+    //TeamControls controls;
 
     float predictionHorizon = 1.0f;
 
@@ -21,6 +22,23 @@ public class TeamManagement : MonoBehaviour
         teamPlayers = GetComponentsInChildren<PlayerMove>();
         //AssignBallToPlayer();
     }
+
+    //public void OnEnable()
+    //{
+    //    if (controls == null)
+    //    {
+    //        controls = new TeamControls();
+    //        // Tell the "gameplay" action map that we want to get told about
+    //        // when actions get triggered.
+    //        //controls.Team.SetCallbacks(this);
+    //    }
+    //    controls.Team.Enable();
+    //}
+
+    //public void OnDisable()
+    //{
+    //    controls.Team.Disable();
+    //}
 
     // Update is called once per frame
     void Update()
