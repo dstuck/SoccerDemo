@@ -9,7 +9,12 @@ public class TeamManagement : MonoBehaviour
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
     PlayerMove[] teamPlayers;
+    BallGoal ballGoal;
     //TeamControls controls;
+
+    public Vector2 ballMovementGoal { get { return ballGoal.movementGoal; } }
+    public Vector2 targetPosition { get { return ballGoal.movementGoal + ballRigidbody2d.position; } }
+
 
     float predictionHorizon = 1.0f;
 
@@ -18,6 +23,7 @@ public class TeamManagement : MonoBehaviour
     {
         ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
         ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
+        ballGoal = GameObject.FindWithTag("Ball").GetComponent<BallGoal>();
         teamPlayerRigidbody2ds = GetComponentsInChildren<Rigidbody2D>();
         teamPlayers = GetComponentsInChildren<PlayerMove>();
         //AssignBallToPlayer();

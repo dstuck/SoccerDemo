@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class BallGoal : MonoBehaviour
 {
     public float baseDistanceGoal = 2f;
     Rigidbody2D ballRigidbody2d;
-    public Vector2 _movementGoal = new Vector2(0, 0);
+    Vector2 _movementGoal = new Vector2(0, 0);
     public Vector2 movementGoal { get { return _movementGoal; } }
     public Vector2 targetPosition { get { return _movementGoal + ballRigidbody2d.position; } }
     TeamControls controls;
+    PlayerInput playerInput;
 
     float kickFactor = 4.0f;
 
@@ -18,6 +20,9 @@ public class BallGoal : MonoBehaviour
     void Start()
     {
         ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
+        playerInput = GetComponent<PlayerInput>();
+        InputUser.PerformPairingWithDevice(Keyboard.current, user: playerInput.user);
+        playerInput.user.ActivateControlScheme(playerInput.defaultControlScheme);
     }
 
     public void OnEnable()
@@ -27,9 +32,10 @@ public class BallGoal : MonoBehaviour
             controls = new TeamControls();
             // Tell the "gameplay" action map that we want to get told about
             // when actions get triggered.
-            //controls.Team.SetCallbacks(this);
+            //controls.Team1.SetCallbacks(this);
         }
         controls.Team.Enable();
+
     }
 
     public void OnDisable()
@@ -40,11 +46,11 @@ public class BallGoal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _movementGoal = controls.Team.Movement.ReadValue<Vector2>();
+        _movementGoal = playerInput.actions["Movement"].ReadValue<Vector2>();
 
         float distanceFactor = baseDistanceGoal;
 
-        if (Keyboard.current.cKey.isPressed)
+        if (playerInput.actions["Kick"].ReadValue<float>() > 0.0f)
         {
             distanceFactor *= kickFactor;
         }
