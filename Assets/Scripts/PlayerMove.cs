@@ -49,6 +49,7 @@ public class PlayerMove : MonoBehaviour
             UpdateMoveGoal();
             //Debug.Log("targetPosition = " + targetPosition);
             _planTimer = 0.0f;
+            hasBall = false;
         }
     }
 
@@ -70,7 +71,7 @@ public class PlayerMove : MonoBehaviour
             )
         {
             Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition).magnitude);
-            hasBall = false; // still too close to ball
+            hasBall = false;
         }
     }
 
