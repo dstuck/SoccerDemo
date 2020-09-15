@@ -37,141 +37,164 @@ public class @TeamControls : IInputActionCollection, IDisposable
             ],
             ""bindings"": [
                 {
-                    ""name"": ""WASD"",
-                    ""id"": ""8e356df3-fcc3-4266-ae5d-c173d656a8ae"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""bae22966-ef08-45b9-bf7a-8f0a2c34a968"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""4675007a-6da2-45a4-8bb4-616f340d3e94"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""98220a34-4ebe-4265-8631-9ca4731f4aec"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""f4742df1-1207-49c5-bdb5-a3a70184a1b0"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""Arrow Keys"",
-                    ""id"": ""e4e85047-8267-4d78-a3fd-60984133c57d"",
+                    ""id"": ""6bfdc053-252e-4f0f-bfee-02fb0b5975cc"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team2Keyboard"",
                     ""action"": ""Movement"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": ""up"",
-                    ""id"": ""0fda616d-5fb0-4572-ac44-5ba7a28e22e0"",
+                    ""id"": ""edffc77d-888f-44db-835c-578ca8c48449"",
                     ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team2Keyboard"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""down"",
-                    ""id"": ""e490dd23-6b33-4d2a-a076-9cb8db9e1e06"",
+                    ""id"": ""27a1dad3-1cd5-4d86-b4d9-89ffa6e3ed4d"",
                     ""path"": ""<Keyboard>/downArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team2Keyboard"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""left"",
-                    ""id"": ""44128ab4-4668-44d5-b856-c9d825feb573"",
+                    ""id"": ""ff6c28e8-1a6a-45fb-8118-f5fc9eb7ed1f"",
                     ""path"": ""<Keyboard>/leftArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team2Keyboard"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""right"",
-                    ""id"": ""8fd1ca35-5e65-4f58-aaa4-dc186eb08330"",
+                    ""id"": ""64ac5a91-3bb1-4d37-b307-b4ee26f202b6"",
                     ""path"": ""<Keyboard>/rightArrow"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team2Keyboard"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3e4ea8a8-c2cc-43c5-a7f3-6c64736717a4"",
-                    ""path"": ""<Gamepad>/leftStick"",
+                    ""id"": ""6fda9504-9e88-45d6-8683-3c992c18de64"",
+                    ""path"": ""<Keyboard>/rightMeta"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
+                    ""groups"": ""Team2Keyboard"",
+                    ""action"": ""Kick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""ae8dff8f-3dfe-4ea5-aca2-23e6b87b4df0"",
+                    ""id"": ""86bfc018-705d-4324-8558-dca8a6dab932"",
                     ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Team1Keyboard"",
                     ""action"": ""Kick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""113e844d-152f-487f-ace7-1efce2e476c9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Team1Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""fe2d826e-d142-4637-9d86-33b4059469c1"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Team1Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""4d03bd59-8597-41e4-8d85-a312cbbdc0f7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Team1Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""68b39db4-9d91-4850-9307-f3a6e05aa9a7"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Team1Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e61a248e-05df-4b9c-94e9-8ee515349925"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Team1Keyboard"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Team1Keyboard"",
+            ""bindingGroup"": ""Team1Keyboard"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Team2Keyboard"",
+            ""bindingGroup"": ""Team2Keyboard"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Team
         m_Team = asset.FindActionMap("Team", throwIfNotFound: true);
@@ -263,6 +286,24 @@ public class @TeamControls : IInputActionCollection, IDisposable
         }
     }
     public TeamActions @Team => new TeamActions(this);
+    private int m_Team1KeyboardSchemeIndex = -1;
+    public InputControlScheme Team1KeyboardScheme
+    {
+        get
+        {
+            if (m_Team1KeyboardSchemeIndex == -1) m_Team1KeyboardSchemeIndex = asset.FindControlSchemeIndex("Team1Keyboard");
+            return asset.controlSchemes[m_Team1KeyboardSchemeIndex];
+        }
+    }
+    private int m_Team2KeyboardSchemeIndex = -1;
+    public InputControlScheme Team2KeyboardScheme
+    {
+        get
+        {
+            if (m_Team2KeyboardSchemeIndex == -1) m_Team2KeyboardSchemeIndex = asset.FindControlSchemeIndex("Team2Keyboard");
+            return asset.controlSchemes[m_Team2KeyboardSchemeIndex];
+        }
+    }
     public interface ITeamActions
     {
         void OnMovement(InputAction.CallbackContext context);
