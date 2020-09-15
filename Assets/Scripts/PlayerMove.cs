@@ -36,6 +36,7 @@ public class PlayerMove : MonoBehaviour
         _planTimer = 0.0f;
         _kickTimer = _kickDelay;
         targetPosition = playerRigidbody2d.position;
+        GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
     }
 
     // Update is called once per frame

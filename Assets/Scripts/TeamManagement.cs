@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TeamManagement : MonoBehaviour
 {
+    public Color teamColor = new Color(255, 255, 255, 255);
     Rigidbody2D ballRigidbody2d;
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
@@ -13,7 +14,7 @@ public class TeamManagement : MonoBehaviour
     //TeamControls controls;
 
     public Vector2 ballMovementGoal { get { return ballGoal.movementGoal; } }
-    public Vector2 targetPosition { get { return ballGoal.movementGoal + ballRigidbody2d.position; } }
+    public Vector2 ballTargetPosition { get { return ballGoal.movementGoal + ballRigidbody2d.position; } }
 
 
     float predictionHorizon = 1.0f;
@@ -28,23 +29,6 @@ public class TeamManagement : MonoBehaviour
         teamPlayers = GetComponentsInChildren<PlayerMove>();
         //AssignBallToPlayer();
     }
-
-    //public void OnEnable()
-    //{
-    //    if (controls == null)
-    //    {
-    //        controls = new TeamControls();
-    //        // Tell the "gameplay" action map that we want to get told about
-    //        // when actions get triggered.
-    //        //controls.Team.SetCallbacks(this);
-    //    }
-    //    controls.Team.Enable();
-    //}
-
-    //public void OnDisable()
-    //{
-    //    controls.Team.Disable();
-    //}
 
     // Update is called once per frame
     void Update()
