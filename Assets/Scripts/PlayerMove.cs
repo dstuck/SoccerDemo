@@ -28,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     float _planTimer;
     float _planDelayTime = 0.05f;
     Vector2 targetPosition;
+    Vector2 targetVelocity;
 
     //Animator animator;
 
@@ -41,6 +42,7 @@ public class PlayerMove : MonoBehaviour
         _planTimer = 0.0f;
         _kickTimer = _kickDelay;
         targetPosition = playerRigidbody2d.position;
+        targetVelocity = new Vector2(0, 0);
         GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
     }
 
@@ -60,11 +62,11 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 targetVelocity = getDesiredVelocity(targetPosition);
-        updateCurVelocity(targetVelocity);
+        Vector2 desiredVelocity = getDesiredVelocity(targetPosition);
+        updateCurVelocity(desiredVelocity);
 
         Vector2 newPosition = targetPosition;
-        if (curVelocity != targetVelocity)
+        if ((targetPosition - playerRigidbody2d.position).magnitude > curSpeed * Time.deltaTime * 0.5f)
         {
             newPosition = playerRigidbody2d.position + curVelocity * Time.deltaTime;
         }
@@ -88,6 +90,7 @@ public class PlayerMove : MonoBehaviour
     void UpdateMoveGoal()
     {
         Vector2 ballTargetPosition = _ballGoal.movementGoal;
+        targetVelocity = ballTargetPosition / 2.0f;
         ballTargetPosition.Normalize();
         targetPosition = _ballRigidbody2d.position - ballTargetPosition * _kickDistance;
     }
@@ -119,15 +122,15 @@ public class PlayerMove : MonoBehaviour
 
     Vector2 getDesiredVelocity(Vector2 desiredPosition)
     {
-        Vector2 targetDistance = targetPosition - playerRigidbody2d.position;
+        Vector2 targetDistance = desiredPosition - playerRigidbody2d.position;
         float goalTime = targetDistance.magnitude / curSpeed;
-        float stoppingTime = curSpeed / maxAcc;
+        float stoppingTime = Mathf.Abs(curSpeed - targetVelocity.magnitude) / maxAcc;
         if (goalTime < stoppingTime)
         {
-            return targetDistance * 0.0f;
+            return targetVelocity;
         }
-        Vector2 targetVelocity = (targetDistance) / Time.deltaTime;
-        return targetVelocity;
+        Vector2 desiredVelocity = (targetDistance) / Time.deltaTime;
+        return desiredVelocity;
     }
 
     void Kick(float kickForce)
