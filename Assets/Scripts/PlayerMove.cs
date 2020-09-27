@@ -60,7 +60,7 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 targetVelocity = getDesiredVelocity(targetPosition);
+        Vector2 targetVelocity = (targetPosition - playerRigidbody2d.position) / Time.deltaTime;
         updateCurVelocity(targetVelocity);
 
         Vector2 newPosition = targetPosition;
@@ -115,19 +115,6 @@ public class PlayerMove : MonoBehaviour
             Vector2 closestPossibleVelocity = possibleVelocityBallCenter + diffVelocity.normalized * possibleVelocityRadius;
             curVelocity = closestPossibleVelocity;
         }
-    }
-
-    Vector2 getDesiredVelocity(Vector2 desiredPosition)
-    {
-        Vector2 targetDistance = targetPosition - playerRigidbody2d.position;
-        float goalTime = targetDistance.magnitude / curSpeed;
-        float stoppingTime = curSpeed / maxAcc;
-        if (goalTime < stoppingTime)
-        {
-            return targetDistance * 0.0f;
-        }
-        Vector2 targetVelocity = (targetDistance) / Time.deltaTime;
-        return targetVelocity;
     }
 
     void Kick(float kickForce)
