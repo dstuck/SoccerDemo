@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float maxSpeed = 4.7f;
+    public float maxSpeed = 9.0f;
+    public float maxAcc = 9.0f;
     public float maxKickForce = 1000.0f;
     public float kickRange = 1.0f;
 
@@ -15,6 +16,10 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
     PhysicsPredictor ballPredictor;
+
+    Vector2 curVelocity = new Vector2(0, 0);
+    public float curSpeed { get { return curVelocity.magnitude; } }
+
     float _kickDistance = 0.1f;
     float _kickDelay = 0.1f;
     float _kickTimer;
@@ -47,7 +52,7 @@ public class PlayerMove : MonoBehaviour
         if (hasBall && _planTimer > _planDelayTime)
         {
             UpdateMoveGoal();
-            //Debug.Log("targetPosition = " + targetPosition);
+            //Debug.Log(name + " targetPosition = " + targetPosition);
             _planTimer = 0.0f;
             hasBall = false;
         }
@@ -55,42 +60,66 @@ public class PlayerMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 moveDir = targetPosition - playerRigidbody2d.position;
-        if (moveDir.magnitude > maxSpeed * Time.deltaTime)
-        {
-            moveDir.Normalize();
-            moveDir *= maxSpeed * Time.deltaTime;
-        }
+        Vector2 targetVelocity = (targetPosition - playerRigidbody2d.position) / Time.deltaTime;
+        updateCurVelocity(targetVelocity);
 
-        playerRigidbody2d.MovePosition(playerRigidbody2d.position + moveDir);
+        Vector2 newPosition = targetPosition;
+        if (curVelocity != targetVelocity)
+        {
+            newPosition = playerRigidbody2d.position + curVelocity * Time.deltaTime;
+        }
+        playerRigidbody2d.MovePosition(newPosition);
 
         if (
             _ballGoal.movementGoal.magnitude > _POSITION_ERROR
-            && (playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR
+            && (playerRigidbody2d.position - _ballRigidbody2d.position).magnitude < Mathf.Max(curSpeed * Time.deltaTime, kickRange)
             && _kickTimer > _kickDelay
             )
         {
-            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition).magnitude);
+            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition));
             hasBall = false;
         }
     }
 
     void UpdateMoveGoal()
     {
-        Vector2 ballTargetPosition = _ballGoal.movementGoal;
-        ballTargetPosition.Normalize();
-        targetPosition = _ballRigidbody2d.position - ballTargetPosition * _kickDistance;
+        targetPosition = _ballRigidbody2d.position;
     }
 
-    void Kick(float kickForce)
+    void updateCurVelocity(Vector2 desiredVelocity)
     {
-        Vector2 diff_vec = _ballRigidbody2d.position - playerRigidbody2d.position;
-        if (diff_vec.magnitude <= kickRange)
+        //if (hasBall)
+        //{ Debug.Log(name + " desiredVelocity: " + desiredVelocity + ", curVelocity: " + curVelocity); }
+        
+        float relDiffOfMaxSpeed = 1.0f - (maxSpeed - curSpeed) / maxSpeed;
+        float possibleVelocityRadius = maxAcc * Time.deltaTime;
+        Vector2 possibleVelocityBallCenter = curVelocity;
+        if (!Mathf.Approximately(curSpeed, 0.0f))
         {
-            Debug.Log("Kicking with force, direction: " + kickForce + ", " + diff_vec);
-            diff_vec.Normalize();
-            _ballRigidbody2d.AddForce(diff_vec * Mathf.Clamp(kickForce, 0, maxKickForce));
-            _kickTimer = 0.0f;
+            possibleVelocityBallCenter = (1.0f - relDiffOfMaxSpeed * possibleVelocityRadius / curSpeed) * curVelocity;
         }
+        //Debug.Log("possibleVelocityBallCenter: " + possibleVelocityBallCenter + " curVelocity: " + curVelocity);
+        Vector2 diffVelocity = desiredVelocity - possibleVelocityBallCenter;
+        if (diffVelocity.sqrMagnitude < possibleVelocityRadius * possibleVelocityRadius)
+        {
+            curVelocity = desiredVelocity;
+        }
+        else
+        {
+            Vector2 closestPossibleVelocity = possibleVelocityBallCenter + diffVelocity.normalized * possibleVelocityRadius;
+            curVelocity = closestPossibleVelocity;
+        }
+    }
+
+    void Kick(Vector2 kickVec)
+    {
+        if (kickVec.SqrMagnitude() > maxKickForce * maxKickForce)
+        {
+            kickVec = kickVec.normalized * maxKickForce;
+        }
+        Debug.Log("Kicking with force: " + kickVec);
+        _ballRigidbody2d.AddForce(kickVec);
+        _kickTimer = 0.0f;
+
     }
 }
