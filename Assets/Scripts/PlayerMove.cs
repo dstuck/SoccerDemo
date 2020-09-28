@@ -68,34 +68,28 @@ public class PlayerMove : MonoBehaviour
         {
             newPosition = playerRigidbody2d.position + curVelocity * Time.deltaTime;
         }
-        else
-        {
-            if (hasBall) { Debug.Log("using targetPosition"); }
-        }
         playerRigidbody2d.MovePosition(newPosition);
 
         if (
             _ballGoal.movementGoal.magnitude > _POSITION_ERROR
-            && (playerRigidbody2d.position - targetPosition).magnitude < _POSITION_ERROR
+            && (playerRigidbody2d.position - _ballRigidbody2d.position).magnitude < Mathf.Max(curSpeed * Time.deltaTime, kickRange)
             && _kickTimer > _kickDelay
             )
         {
-            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition).magnitude);
+            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition));
             hasBall = false;
         }
     }
 
     void UpdateMoveGoal()
     {
-        Vector2 ballTargetPosition = _ballGoal.movementGoal;
-        ballTargetPosition.Normalize();
-        targetPosition = _ballRigidbody2d.position - ballTargetPosition * _kickDistance;
+        targetPosition = _ballRigidbody2d.position;
     }
 
     void updateCurVelocity(Vector2 desiredVelocity)
     {
-        if (hasBall)
-        { Debug.Log(name + " desiredVelocity: " + desiredVelocity + ", curVelocity: " + curVelocity); }
+        //if (hasBall)
+        //{ Debug.Log(name + " desiredVelocity: " + desiredVelocity + ", curVelocity: " + curVelocity); }
         
         float relDiffOfMaxSpeed = 1.0f - (maxSpeed - curSpeed) / maxSpeed;
         float possibleVelocityRadius = maxAcc * Time.deltaTime;
@@ -117,15 +111,15 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    void Kick(float kickForce)
+    void Kick(Vector2 kickVec)
     {
-        Vector2 diff_vec = _ballRigidbody2d.position - playerRigidbody2d.position;
-        if (diff_vec.magnitude <= kickRange)
+        if (kickVec.SqrMagnitude() > maxKickForce * maxKickForce)
         {
-            Debug.Log("Kicking with force, direction: " + kickForce + ", " + diff_vec);
-            diff_vec.Normalize();
-            _ballRigidbody2d.AddForce(diff_vec * Mathf.Clamp(kickForce, 0, maxKickForce));
-            _kickTimer = 0.0f;
+            kickVec = kickVec.normalized * maxKickForce;
         }
+        Debug.Log("Kicking with force: " + kickVec);
+        _ballRigidbody2d.AddForce(kickVec);
+        _kickTimer = 0.0f;
+
     }
 }
