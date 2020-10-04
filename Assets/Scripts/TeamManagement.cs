@@ -9,7 +9,7 @@ public class TeamManagement : MonoBehaviour
     Rigidbody2D ballRigidbody2d;
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
-    PlayerMove[] teamPlayers;
+    SoccerPlayer[] teamPlayers;
     BallGoal ballGoal;
     //TeamControls controls;
 
@@ -26,7 +26,7 @@ public class TeamManagement : MonoBehaviour
         ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
         ballGoal = GameObject.FindWithTag("Ball").GetComponent<BallGoal>();
         teamPlayerRigidbody2ds = GetComponentsInChildren<Rigidbody2D>();
-        teamPlayers = GetComponentsInChildren<PlayerMove>();
+        teamPlayers = GetComponentsInChildren<SoccerPlayer>();
         //AssignBallToPlayer();
     }
 
@@ -61,6 +61,6 @@ public class TeamManagement : MonoBehaviour
         Vector2 futureBallPosition = ballPredictor.PredictPositionInFuture(predictionHorizon);
         //Debug.Log("Current, future position: " + ballRigidbody2d.position + ", " + futureBallPosition);
         Rigidbody2D closest_player = GetClosestPlayer(futureBallPosition);
-        closest_player.gameObject.GetComponent<PlayerMove>().hasBall = true;
+        closest_player.gameObject.GetComponent<SoccerPlayer>().hasBall = true;
     }
 }

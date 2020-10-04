@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class SoccerPlayer : MonoBehaviour
 {
     public float maxSpeed = 9.0f;
     public float maxAcc = 9.0f;
     public float maxKickForce = 1000.0f;
     public float kickRange = 1.0f;
+
+    private StateMachine _stateMachine;
 
     bool _hasBall = false;
     public bool hasBall { get { return _hasBall; } set { _hasBall = value; } }
@@ -20,7 +23,6 @@ public class PlayerMove : MonoBehaviour
     Vector2 curVelocity = new Vector2(0, 0);
     public float curSpeed { get { return curVelocity.magnitude; } }
 
-    float _kickDistance = 0.1f;
     float _kickDelay = 0.1f;
     float _kickTimer;
     float _POSITION_ERROR = 0.00001f;
@@ -31,6 +33,9 @@ public class PlayerMove : MonoBehaviour
 
     //Animator animator;
 
+    private void Awake()
+    {
+    }
     void Start()
     {
         //animator = GetComponent<Animator>();
@@ -42,6 +47,22 @@ public class PlayerMove : MonoBehaviour
         _kickTimer = _kickDelay;
         targetPosition = playerRigidbody2d.position;
         GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
+
+        _stateMachine = new StateMachine();
+
+        var idle = new Idle();
+        var hasBallState = new HasBall(GetComponentInParent<TeamManagement>(), _ballGoal);
+
+        //var moveToSelected = new MoveToSelectedResource(this, navMeshAgent, animator);
+
+        At(idle, hasBallState, () => hasBall);
+        At(hasBallState, idle, () => !hasBall);
+
+        //At(flee, search, () => enemyDetector.EnemyInRange == false);
+
+        _stateMachine.SetState(idle);
+
+        void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(to, from, condition);
     }
 
     // Update is called once per frame
@@ -49,6 +70,7 @@ public class PlayerMove : MonoBehaviour
     {
         _planTimer += Time.deltaTime;
         _kickTimer += Time.deltaTime;
+        _stateMachine.Tick();
         if (hasBall && _planTimer > _planDelayTime)
         {
             UpdateMoveGoal();
