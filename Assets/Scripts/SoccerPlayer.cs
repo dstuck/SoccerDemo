@@ -14,6 +14,8 @@ public class SoccerPlayer : MonoBehaviour
 
     bool _hasBall = false;
     public bool hasBall { get { return _hasBall; } set { _hasBall = value; } }
+    Vector2 targetPosition;
+    public Vector2 TargetPosition { get => targetPosition; set => targetPosition = value; }
 
     Rigidbody2D playerRigidbody2d;
     Rigidbody2D _ballRigidbody2d;
@@ -23,13 +25,10 @@ public class SoccerPlayer : MonoBehaviour
     Vector2 curVelocity = new Vector2(0, 0);
     public float curSpeed { get { return curVelocity.magnitude; } }
 
+
     float _kickDelay = 0.1f;
     float _kickTimer;
     float _POSITION_ERROR = 0.00001f;
-
-    float _planTimer;
-    float _planDelayTime = 0.05f;
-    Vector2 targetPosition;
 
     //Animator animator;
 
@@ -43,15 +42,16 @@ public class SoccerPlayer : MonoBehaviour
         _ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
         _ballGoal = GetComponentInParent<BallGoal>();
         ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
-        _planTimer = 0.0f;
         _kickTimer = _kickDelay;
-        targetPosition = playerRigidbody2d.position;
+        TargetPosition = playerRigidbody2d.position;
         GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
 
+
+        // State Machine Management
         _stateMachine = new StateMachine();
 
         var idle = new Idle();
-        var hasBallState = new HasBall(GetComponentInParent<TeamManagement>(), _ballGoal);
+        var hasBallState = new HasBall(this, GetComponentInParent<TeamManagement>(), _ballGoal, _ballRigidbody2d);
 
         //var moveToSelected = new MoveToSelectedResource(this, navMeshAgent, animator);
 
@@ -68,24 +68,16 @@ public class SoccerPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _planTimer += Time.deltaTime;
         _kickTimer += Time.deltaTime;
         _stateMachine.Tick();
-        if (hasBall && _planTimer > _planDelayTime)
-        {
-            UpdateMoveGoal();
-            //Debug.Log(name + " targetPosition = " + targetPosition);
-            _planTimer = 0.0f;
-            hasBall = false;
-        }
     }
 
     void FixedUpdate()
     {
-        Vector2 targetVelocity = (targetPosition - playerRigidbody2d.position) / Time.deltaTime;
+        Vector2 targetVelocity = (TargetPosition - playerRigidbody2d.position) / Time.deltaTime;
         updateCurVelocity(targetVelocity);
 
-        Vector2 newPosition = targetPosition;
+        Vector2 newPosition = TargetPosition;
         if (curVelocity != targetVelocity)
         {
             newPosition = playerRigidbody2d.position + curVelocity * Time.deltaTime;
@@ -105,7 +97,7 @@ public class SoccerPlayer : MonoBehaviour
 
     void UpdateMoveGoal()
     {
-        targetPosition = _ballRigidbody2d.position;
+        TargetPosition = _ballRigidbody2d.position;
     }
 
     void updateCurVelocity(Vector2 desiredVelocity)
