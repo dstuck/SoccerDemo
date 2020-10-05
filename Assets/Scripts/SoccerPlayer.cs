@@ -14,8 +14,10 @@ public class SoccerPlayer : MonoBehaviour
 
     bool _hasBall = false;
     public bool hasBall { get { return _hasBall; } set { _hasBall = value; } }
-    Vector2 targetPosition;
-    public Vector2 TargetPosition { get => targetPosition; set => targetPosition = value; }
+    Vector2 _targetPosition;
+    public Vector2 TargetPosition { get => _targetPosition; set => _targetPosition = value; }
+    Vector2 _targetKick;
+    public Vector2 TargetKick { get => _targetKick; set => _targetKick = value; }
 
     Rigidbody2D playerRigidbody2d;
     Rigidbody2D _ballRigidbody2d;
@@ -25,16 +27,13 @@ public class SoccerPlayer : MonoBehaviour
     Vector2 curVelocity = new Vector2(0, 0);
     public float curSpeed { get { return curVelocity.magnitude; } }
 
-
     float _kickDelay = 0.1f;
     float _kickTimer;
-    float _POSITION_ERROR = 0.00001f;
+
+    Vector2 zeroVec = new Vector2(0.0f, 0.0f);
 
     //Animator animator;
 
-    private void Awake()
-    {
-    }
     void Start()
     {
         //animator = GetComponent<Animator>();
@@ -43,7 +42,8 @@ public class SoccerPlayer : MonoBehaviour
         _ballGoal = GetComponentInParent<BallGoal>();
         ballPredictor = GameObject.FindWithTag("Ball").GetComponent<PhysicsPredictor>();
         _kickTimer = _kickDelay;
-        TargetPosition = playerRigidbody2d.position;
+        _targetPosition = playerRigidbody2d.position;
+        _targetKick = zeroVec;
         GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
 
 
@@ -85,19 +85,15 @@ public class SoccerPlayer : MonoBehaviour
         playerRigidbody2d.MovePosition(newPosition);
 
         if (
-            _ballGoal.movementGoal.magnitude > _POSITION_ERROR
+            !(Mathf.Approximately(TargetKick.sqrMagnitude, 0.0f))
             && (playerRigidbody2d.position - _ballRigidbody2d.position).magnitude < Mathf.Max(curSpeed * Time.deltaTime, kickRange)
             && _kickTimer > _kickDelay
             )
         {
-            Kick(ballPredictor.PredictForceToReachPoint(_ballGoal.targetPosition));
+            Kick(TargetKick);
+            _targetKick = zeroVec;
             hasBall = false;
         }
-    }
-
-    void UpdateMoveGoal()
-    {
-        TargetPosition = _ballRigidbody2d.position;
     }
 
     void updateCurVelocity(Vector2 desiredVelocity)
@@ -135,5 +131,10 @@ public class SoccerPlayer : MonoBehaviour
         _ballRigidbody2d.AddForce(kickVec);
         _kickTimer = 0.0f;
 
+    }
+
+    public void SetKickFromPosition(Vector2 desiredBallPosition)
+    {
+        TargetKick = ballPredictor.PredictForceToReachPoint(desiredBallPosition);
     }
 }
