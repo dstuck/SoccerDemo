@@ -63,4 +63,9 @@ public class TeamManagement : MonoBehaviour
         Rigidbody2D closest_player = GetClosestPlayer(futureBallPosition);
         closest_player.gameObject.GetComponent<SoccerPlayer>().hasBall = true;
     }
+
+    public float GetDirection()
+    {
+        return transform.localScale.x;
+    }
 }
