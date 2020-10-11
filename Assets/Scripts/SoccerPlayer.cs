@@ -9,6 +9,8 @@ public class SoccerPlayer : MonoBehaviour
     public float maxAcc = 9.0f;
     public float maxKickForce = 1000.0f;
     public float kickRange = 1.0f;
+    public PositionNames positionName;
+    public SoccerPosition soccerPosition;
 
     private StateMachine _stateMachine;
 
@@ -23,6 +25,7 @@ public class SoccerPlayer : MonoBehaviour
     Rigidbody2D _ballRigidbody2d;
     BallGoal _ballGoal;
     PhysicsPredictor ballPredictor;
+    TeamManagement _team;
 
     Vector2 curVelocity = new Vector2(0, 0);
     public float curSpeed { get { return curVelocity.magnitude; } }
@@ -44,13 +47,15 @@ public class SoccerPlayer : MonoBehaviour
         _kickTimer = _kickDelay;
         _targetPosition = playerRigidbody2d.position;
         _targetKick = zeroVec;
-        GetComponent<SpriteRenderer>().color = GetComponentInParent<TeamManagement>().teamColor;
+        _team = GetComponentInParent<TeamManagement>();
+        GetComponent<SpriteRenderer>().color = _team.teamColor;
 
+        soccerPosition = SoccerPositionFactory.CreatePositionForName(positionName, _team);
 
         // State Machine Management
         _stateMachine = new StateMachine();
 
-        var idle = new Idle();
+        var idle = new Idle(this);
         var hasBallState = new HasBall(this, GetComponentInParent<TeamManagement>(), _ballGoal, _ballRigidbody2d);
 
         //var moveToSelected = new MoveToSelectedResource(this, navMeshAgent, animator);
