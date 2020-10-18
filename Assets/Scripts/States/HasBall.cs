@@ -27,7 +27,6 @@ public class HasBall : IState
     public void OnEnter()
     {
         _planTimer = 0.0f;
-        Debug.Log("I got the ball");
     }
 
     public void Tick()
@@ -47,6 +46,5 @@ public class HasBall : IState
 
     public void OnExit()
     {
-        Debug.Log("I lost the ball");
     }
 }

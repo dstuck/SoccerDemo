@@ -32,6 +32,7 @@ public class TeamManagement : MonoBehaviour
         teamPlayerRigidbody2ds = GetComponentsInChildren<Rigidbody2D>();
         teamPlayers = GetComponentsInChildren<SoccerPlayer>();
         //AssignBallToPlayer();
+        _updateScoreboard();
     }
 
     // Update is called once per frame
@@ -76,5 +77,22 @@ public class TeamManagement : MonoBehaviour
     public void scoredGoal()
     {
         score += 1;
+        _updateScoreboard();
+    }
+    private void _updateScoreboard()
+    {
+        Vector2 anchorPoint = new Vector2(0.0f, 1.0f);
+        float offset = 20.0f;
+        if (GetDirection() < 0.0f)
+        {
+            anchorPoint.x = 1.0f;
+            offset *= -1.0f;
+        }
+        Vector2 newAnchorPosition = new Vector2(offset, -50.0f);
+
+        scoreboard.rectTransform.anchorMin = anchorPoint;
+        scoreboard.rectTransform.anchorMax = anchorPoint;
+        scoreboard.rectTransform.anchoredPosition = newAnchorPosition;
+        scoreboard.text = score.ToString();
     }
 }
