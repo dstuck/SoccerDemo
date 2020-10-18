@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TeamManagement : MonoBehaviour
 {
     public Color teamColor = new Color(255, 255, 255, 255);
+    public Text scoreboard;
+
+    int score = 0;
     Rigidbody2D ballRigidbody2d;
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
@@ -67,5 +71,10 @@ public class TeamManagement : MonoBehaviour
     public float GetDirection()
     {
         return transform.localScale.x;
+    }
+
+    public void scoredGoal()
+    {
+        score += 1;
     }
 }
