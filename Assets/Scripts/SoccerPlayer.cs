@@ -132,7 +132,7 @@ public class SoccerPlayer : MonoBehaviour
         {
             kickVec = kickVec.normalized * maxKickForce;
         }
-        Debug.Log("Kicking with force: " + kickVec);
+        //Debug.Log("Kicking with force: " + kickVec);
         _ballRigidbody2d.AddForce(kickVec);
         _kickTimer = 0.0f;
 
