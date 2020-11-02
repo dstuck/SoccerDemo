@@ -75,6 +75,7 @@ public class SoccerPlayer : MonoBehaviour
     {
         _kickTimer += Time.deltaTime;
         _stateMachine.Tick();
+        hasBall = false; // Could add timer here
     }
 
     void FixedUpdate()
@@ -97,7 +98,7 @@ public class SoccerPlayer : MonoBehaviour
         {
             Kick(TargetKick);
             _targetKick = zeroVec;
-            hasBall = false;
+            //hasBall = false;
         }
     }
 
