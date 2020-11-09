@@ -56,18 +56,24 @@ public class SoccerPlayer : MonoBehaviour
         _stateMachine = new StateMachine();
 
         var idle = new Idle(this);
+        var kickoff = new Kickoff(this);
         var hasBallState = new HasBall(this, GetComponentInParent<TeamManagement>(), _ballGoal, _ballRigidbody2d);
 
         //var moveToSelected = new MoveToSelectedResource(this, navMeshAgent, animator);
 
         At(idle, hasBallState, () => hasBall);
         At(hasBallState, idle, () => !hasBall);
+        At(idle, kickoff, () => _team.isKickoff);
+        At(hasBallState, kickoff, () => _team.isKickoff);
+        At(kickoff, idle, () => kickoff.kickoffTimer > 8.0f);
 
         //At(flee, search, () => enemyDetector.EnemyInRange == false);
 
         _stateMachine.SetState(idle);
 
         void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(to, from, condition);
+
+        transform.position = soccerPosition.GetKickoffPosition();
     }
 
     // Update is called once per frame
