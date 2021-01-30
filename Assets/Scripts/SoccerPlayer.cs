@@ -12,6 +12,8 @@ public class SoccerPlayer : MonoBehaviour
     public PositionNames positionName;
     public SoccerPosition soccerPosition;
 
+    private static readonly float TIME_BEFORE_KICKOFF = 9.0f;
+
     private StateMachine _stateMachine;
 
     bool _hasBall = false;
@@ -27,7 +29,7 @@ public class SoccerPlayer : MonoBehaviour
     PhysicsPredictor ballPredictor;
     TeamManagement _team;
 
-    Vector2 curVelocity = new Vector2(0, 0);
+    Vector2 curVelocity = new Vector2(0.0f, 0.0f);
     public float curSpeed { get { return curVelocity.magnitude; } }
 
     float _kickDelay = 0.1f;
@@ -56,18 +58,22 @@ public class SoccerPlayer : MonoBehaviour
         _stateMachine = new StateMachine();
 
         var idle = new Idle(this);
+        var kickoff = new Kickoff(this);
         var hasBallState = new HasBall(this, GetComponentInParent<TeamManagement>(), _ballGoal, _ballRigidbody2d);
 
         //var moveToSelected = new MoveToSelectedResource(this, navMeshAgent, animator);
 
         At(idle, hasBallState, () => hasBall);
         At(hasBallState, idle, () => !hasBall);
-
-        //At(flee, search, () => enemyDetector.EnemyInRange == false);
+        At(idle, kickoff, () => _team.isKickoff);
+        At(hasBallState, kickoff, () => _team.isKickoff);
+        At(kickoff, idle, () => kickoff.kickoffTimer > TIME_BEFORE_KICKOFF);
 
         _stateMachine.SetState(idle);
 
         void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(to, from, condition);
+
+        transform.position = soccerPosition.GetKickoffPosition();
     }
 
     // Update is called once per frame
@@ -97,16 +103,12 @@ public class SoccerPlayer : MonoBehaviour
             )
         {
             Kick(TargetKick);
-            _targetKick = zeroVec;
-            //hasBall = false;
+            ResetKick();
         }
     }
 
     void updateCurVelocity(Vector2 desiredVelocity)
-    {
-        //if (hasBall)
-        //{ Debug.Log(name + " desiredVelocity: " + desiredVelocity + ", curVelocity: " + curVelocity); }
-        
+    {        
         float relDiffOfMaxSpeed = 1.0f - (maxSpeed - curSpeed) / maxSpeed;
         float possibleVelocityRadius = maxAcc * Time.deltaTime;
         Vector2 possibleVelocityBallCenter = curVelocity;
@@ -142,5 +144,11 @@ public class SoccerPlayer : MonoBehaviour
     public void SetKickFromPosition(Vector2 desiredBallPosition)
     {
         TargetKick = ballPredictor.PredictForceToReachPoint(desiredBallPosition);
+    }
+
+    public void ResetKick()
+    {
+        _targetKick = zeroVec;
+        //hasBall = false;
     }
 }

@@ -46,5 +46,6 @@ public class HasBall : IState
 
     public void OnExit()
     {
+        _player.ResetKick();
     }
 }

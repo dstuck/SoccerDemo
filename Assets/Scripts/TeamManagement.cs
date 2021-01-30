@@ -10,6 +10,7 @@ public class TeamManagement : MonoBehaviour
     public Text scoreboard;
 
     int score = 0;
+    public bool isKickoff;
     Rigidbody2D ballRigidbody2d;
     PhysicsPredictor ballPredictor;
     Rigidbody2D[] teamPlayerRigidbody2ds;
@@ -42,6 +43,7 @@ public class TeamManagement : MonoBehaviour
         {
             AssignBallToPlayer();
         }
+        isKickoff = false;
     }
 
     Rigidbody2D GetClosestPlayer(Vector2 point)
@@ -78,7 +80,14 @@ public class TeamManagement : MonoBehaviour
     {
         score += 1;
         _updateScoreboard();
+        resetTeam();
     }
+
+    public void scoredOn()
+    {
+        resetTeam();
+    }
+
     private void _updateScoreboard()
     {
         Vector2 anchorPoint = new Vector2(0.0f, 1.0f);
@@ -94,5 +103,9 @@ public class TeamManagement : MonoBehaviour
         scoreboard.rectTransform.anchorMax = anchorPoint;
         scoreboard.rectTransform.anchoredPosition = newAnchorPosition;
         scoreboard.text = score.ToString();
+    }
+    private void resetTeam()
+    {
+        isKickoff = true;
     }
 }
