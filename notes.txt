@@ -9,3 +9,8 @@ have more complex controls that can can be puppeted by the ball?
 
 Setting one unit per meter requires scaling sprites. i.e. man sprite is 76 pixels high, so need to set 42 pix/unit so that he is 1.8 units tall or ~6 ft
 10 miles per hour (6 minute mile) is 4.47 m/s
+
+Build issues:
+- fails if using caching, not using decompression fallback: https://forum.unity.com/threads/uncaught-referenceerror-unityframework-is-not-defined-at-htmlscriptelement-script-onload-webgl.803967/
+- webgl with new input system is finicky and requires the device to input something first before it will pair: https://forum.unity.com/threads/new-input-system-not-working-in-webgl-builds.870421/
+
