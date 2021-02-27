@@ -13,23 +13,22 @@ public class BallGoal : MonoBehaviour
     public Vector2 targetPosition { get { return _movementGoal + ballRigidbody2d.position; } }
     TeamControls controls;
     PlayerInput playerInput;
-    private Keyboard kb; //hack around webgl input incompatability
+
+    private bool controls_init; //hack around webgl input incompatability
 
     float kickFactor = 4.0f;
 
 
     void Start()
     {
+        controls_init = false;
         ballRigidbody2d = GameObject.FindWithTag("Ball").GetComponent<Rigidbody2D>();
         playerInput = GetComponent<PlayerInput>();
-        kb = Keyboard.current;
-        InputUser.PerformPairingWithDevice(Keyboard.current, user: playerInput.user);
-        playerInput.user.ActivateControlScheme(playerInput.defaultControlScheme);
     }
 
     public void OnEnable()
     {
-        if (kb == null)
+        if (controls == null)
         {
             controls = new TeamControls();
             // Tell the "gameplay" action map that we want to get told about
@@ -48,7 +47,7 @@ public class BallGoal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (kb != null)
+        if (controls_init)
         {
             _movementGoal = playerInput.actions["Movement"].ReadValue<Vector2>();
 
@@ -68,7 +67,12 @@ public class BallGoal : MonoBehaviour
         }
         else
         {
-            kb = Keyboard.current; // as a workaround: keep assigning the device value until it's not null
+            if (Keyboard.current != null)
+            {
+                InputUser.PerformPairingWithDevice(Keyboard.current, user: playerInput.user);
+                playerInput.user.ActivateControlScheme(playerInput.defaultControlScheme);
+                controls_init = true;
+            }
         }
     }
 }
